@@ -1,0 +1,21 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: deploy
+        run: |
+          # deployment logic
+          # Example: If using Docker & SSH to deploy
+          ssh user@your-server "cd /path/to/app && git pull && docker-compose up -d --build"
