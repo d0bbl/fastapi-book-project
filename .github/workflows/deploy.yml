@@ -24,7 +24,7 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           
-          ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i "Test server.pem" ubuntu@ec2-13-61-146-215.eu-north-1.compute.amazonaws.com << 'EOF'
             cd /home/ubuntu/fastapi-app
             git pull origin main
             sudo systemctl restart fastapi
