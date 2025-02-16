@@ -15,7 +15,17 @@ jobs:
         uses: actions/checkout@v4
 
       - name: deploy
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          EC2_USER: ubuntu
+          EC2_HOST: ${{ secrets.EC2_HOST }}
         run: |
-          # deployment logic
-          # Example: If using Docker & SSH to deploy
-          ssh user@your-server "cd /path/to/app && git pull && docker-compose up -d --build"
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          
+          ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
+            cd /home/ubuntu/fastapi-app
+            git pull origin main
+            sudo systemctl restart fastapi
+          EOF
